@@ -1,5 +1,16 @@
 # expense-server-rawsql
 
+- server use postgresql for database
+
+## installation
+
+```
+git clone https://github.com/nutthanonn/expense-server-rawsql.git
+cd expense-server-rawsql
+npm install
+npm run dev
+```
+
 ## setup .env
 
 ```
