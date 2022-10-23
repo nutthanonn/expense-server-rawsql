@@ -12,14 +12,20 @@ async function getTransection(id: string) {
 router.get("/api/card/all", async (req: Request, res: Response) => {
   const data: any = [];
 
-  const cardData = await client.query("select * from card");
+  try {
+    const cardData = await client.query("select * from card");
 
-  for (let i = 0; i < cardData.rows.length; i++) {
-    const transectionData = await getTransection(cardData.rows[i].card_number);
-    await data.push({
-      card: cardData.rows[i],
-      transection: transectionData.rows,
-    });
+    for (let i = 0; i < cardData.rows.length; i++) {
+      const transectionData = await getTransection(
+        cardData.rows[i].card_number
+      );
+      await data.push({
+        card: cardData.rows[i],
+        transection: transectionData.rows,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 
   res.json(data);
