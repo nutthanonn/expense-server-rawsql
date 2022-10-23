@@ -1,14 +1,25 @@
 import express, { Request, Response } from "express";
 import { client } from "../config/db";
+import { HttpStatus } from "../config/httpStatus";
 
 const router = express.Router();
 
 router.get("/api/card", async (req: Request, res: Response) => {
   try {
     const data = await client.query("select * from card");
-    res.status(200).json({ data: data.rows });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    if (data.rows.length > 0) {
+      return res
+        .status(HttpStatus.OK)
+        .json({ message: "success", card: data.rows });
+    } else {
+      return res
+        .status(HttpStatus.NO_CONTENT)
+        .json({ message: "no content", card: [] });
+    }
+  } catch (error: any) {
+    return res
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: error.detail });
   }
 });
 
